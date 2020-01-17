@@ -5,7 +5,8 @@ I took some inspiration from this thread here: https://stackoverflow.com/questio
 I'm pretty sure nobody will ever attempt to runthis
 ### requirements to run
 1. Linux
-2. probably some amount of tweaking (check the source code):
+2. make the file **cancer** executable
+3. probably some amount of tweaking (check the source code):
   * edit the variables so they point to existing filepaths (pretty sure no1 haz defined **$OWN_STUFF** on their devices :)
   * in the directory noted by variable "**preset_path**", add/or generate mp3 files that are supposed to be played
     * file named "**cat.mp3**" will be played on execution of **cat** command, "**ls.mp3**" would be played on **ls** command, and so on
