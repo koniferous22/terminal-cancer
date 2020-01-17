@@ -1,0 +1,32 @@
+#!/bin/sh
+
+
+# command line argument parsing goes somewhere here
+
+# configuration
+preset_root="$OWN_STUFF/resources/terminal-cancer"
+preset=segedin
+preset_path="$preset_root/$preset"
+file_extension=mp3
+
+socket_dir="$OWN_STUFF/src/terminal-cancer"
+socket_file="cancer-socket"
+socket_path="$socket_dir/$socket_file"
+
+echo "Compiling the socket"
+gcc "$socket_path.c" -o "$socket_path"
+
+# get list of shell processes
+listened_terminal_types=terminator,gnome-terminal-
+terminal_processes=$(ps -C "$listened_terminal_types" | tail -n +2 | awk '{print $1}' | xargs | tr ' ' ',')
+listened_shell_types=bash # in case zsh will be used use for example 'bash,zsh' value instead
+shell_processes=$(pgrep -P "$terminal_processes" "$listened_shell_types" | xargs)
+
+stdbuf -oL sudo "$socket_path" $shell_processes | #> /dev/null &
+	while IFS= read -r line
+	do
+		commentary_fp="$preset_path/$line.$file_extension"
+		if [ -f "$commentary_fp" ]; then
+			mpg123 -q "$commentary_fp"
+		fi
+	done

@@ -1,0 +1,13 @@
+#!/bin/sh
+while read line; do
+	if [ ! "$line" ]; then
+		continue
+	fi
+	args=( $line )
+	command="${args[0]}"
+	tts -l sk -o "$command.mp3" "${args[@]:1}" # my own command that downloads mp3 text to speech from google translate API
+done < ./generator.txt
+
+# contents of generator.txt file are following:
+# cat phrase-to-say-when-cat-command-is-entered.mp3
+
