@@ -1,0 +1,48 @@
+#!/bin/sh
+text="Sample Text"
+language=en
+OPTIND=1
+output_file=
+play=true
+force_play=
+tmp_file=
+while getopts "l:o:hp" opt; do
+    case "$opt" in
+    l)
+        language=$OPTARG
+        ;;
+    o)
+		output_file=$OPTARG
+		play=
+		;;
+	h)
+		echo "
+-l Language (sk, en, etc)
+-o specify output output_file
+-p plays the clip
+"
+		;;
+	p)
+		force_play=true
+		;;
+    esac
+done
+if [ "$force_play" ]; then
+	play=true
+fi
+shift $((OPTIND -1))
+if [ $# -gt 0 ]; then
+	text=$@
+fi
+if [ -z $output_file ]; then
+	tmp_file=`mktemp -p /tmp`
+	output_file=$tmp_file
+fi
+echo $language
+gtts-cli -l $language -o $output_file "\"$text\""
+if [ "$play" ]; then
+	mpg123 -q $output_file
+fi 
+if [ "$tmp_file" ]; then
+	rm $tmp_file
+fi
